@@ -1,0 +1,5 @@
+name = "Node recur"
+description = "Recur nodes based on time criteria"
+core = "7.x"
+dependencies[] = "date"
+dependencies[] = "date_api"
