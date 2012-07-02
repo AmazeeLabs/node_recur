@@ -306,6 +306,7 @@ function node_recur_menu_title_callback($node) {
  */
 function node_recur_generate_dates_rule($node, $date, $frequency, $period, $until, $weekends = TRUE) {
   $dates = array();
+  $month = FALSE;
   
   // Convert date and until date to timestamp, if needed
   $date = is_string($date) ? strtotime($date) : $date;
@@ -321,10 +322,12 @@ function node_recur_generate_dates_rule($node, $date, $frequency, $period, $unti
     return FALSE;
   }
   
-  // Convert month period to weeks
+  // Convert month period to weeks, in order to preserve the day
+  // of the week
   if ($period == 'month') {
     $frequency = $frequency * 4;
     $period = 'week';
+    $month = TRUE;
   }
   
   // Track the current date
@@ -332,25 +335,35 @@ function node_recur_generate_dates_rule($node, $date, $frequency, $period, $unti
   
   // Iterate and generate dates until we reach the end
   while (TRUE) {
-    $current = strtotime("+{$frequency} " . format_plural($frequency, $period, "{$period}s"), $current);
+    // Generate the next date
+    $next = strtotime("+{$frequency} " . format_plural($frequency, $period, "{$period}s"), $current);
+    
+    // If this is a month recur, we need to make sure the the next date
+    // is on the next month. Some months have 5 repeats of the same day
+    if ($month && (date('n', $next) == date('n', $current))) {
+      // Jump forward one more week
+      $next = strtotime('+1 week', $next);
+    }
     
     // Make sure date is in the future, if the settings dictate that
-    if (!node_recur_allow_past_dates($node->type) && $current < REQUEST_TIME) {
+    if (!node_recur_allow_past_dates($node->type) && $next < REQUEST_TIME) {
       continue;
     }
     
     // If we're excluding weekends, skip this if it's a weekend
     if (!$weekends) {
-      $day = date('D', $current);
+      $day = date('D', $next);
       if ($day == 'Sun' || $day == 'Sat') {
         continue;
       }
     }
     
     // See if this date puts us past the limit
-    if ($current > $until) {
+    if ($next > $until) {
       break;
     }
+    
+    $current = $next;
     
     $dates[] = $current;
   }
