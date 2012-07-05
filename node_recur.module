@@ -429,22 +429,30 @@ function node_recur_generate_dates_days($node, $date, $days, $until, $offset = N
 
   // Iterate and generate dates until we reach the end
   while (TRUE) {
-    foreach ($days as $day) {
+ foreach ($days as $day) {
       // Determine how many days until the next "day"
       $next_day = date('z', strtotime("next {$day}", $current));
       $days_apart = $next_day - date('z', $current);
+
+      // If days apart is negative, we've jumped to a new year
+      if ($days_apart < 0) {
+        // Use 366 instead of 365 because the first day is 1, not 0
+        $days_apart += 366;
+      }
+      
+      // Apply the day differential
       $current += ($days_apart * 86400);
+      
+      // See if this date puts us past the limit
+      if ($current > $until) {
+        break 2;
+      }
       
       // See if we have to skip until we use the first day
       if ($first_day && $first_day != $next_day) {
         continue;
       }
       $first_day = NULL;
-     
-      // See if this date puts us past the limit
-      if ($current > $until) {
-        break 2;
-      }
       
       // Apply the offset, if one
       $date_to_use = $current;
