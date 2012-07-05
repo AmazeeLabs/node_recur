@@ -345,6 +345,8 @@ function node_recur_generate_dates_rule($node, $date, $frequency, $period, $unti
       $next = strtotime('+1 week', $next);
     }
     
+    $current = $next;
+    
     // Make sure date is in the future, if the settings dictate that
     if (!node_recur_allow_past_dates($node->type) && $next < REQUEST_TIME) {
       continue;
@@ -362,8 +364,6 @@ function node_recur_generate_dates_rule($node, $date, $frequency, $period, $unti
     if ($next > $until) {
       break;
     }
-    
-    $current = $next;
     
     $dates[] = $current;
   }
