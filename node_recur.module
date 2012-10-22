@@ -536,7 +536,31 @@ function node_recur_generate_dates_from_form($node, $form_state) {
     }
   }
   
-  return array('start' => $start_dates, 'end' => $end_dates);
+  // Allow other modules to alter the dates
+  $dates = array(
+    'start' => $start_dates,
+    'end' => $end_dates,
+  );
+  $variables = array(
+    'node' => $node,
+    'start_date' => $start_date,
+    'end_date' => $end_date,
+    'option' => $option,
+    'until' => $until,
+  );
+  if ($option == 'days') {
+    $variables['days'] = $days;
+  }
+  if ($option == 'rules') {
+    $variables += array(
+      'frequency' => $frequency,
+      'period' => $period,
+      'weekends' => $weekends,
+    );
+  }
+  drupal_alter('node_recur_dates', $dates, $variables);
+  
+  return $dates;
 }
 
 /**
