@@ -131,7 +131,7 @@ function node_recur_node_recur_form_validate(&$form, &$form_state) {
   }
   
   $node = $form['#node'];
-  
+
   // If days option is selected, make sure we have at least one day
   if ($form_state['values']['option'] == 'days') {
     $days = 0;
@@ -161,6 +161,14 @@ function node_recur_node_recur_form_validate(&$form, &$form_state) {
   if ($max = node_recur_max_future_date_span($node->type)) {
     if ($until > strtotime($max, REQUEST_TIME)) {
       form_set_error('until', t('The end date can only be up to %max in the future.', array('%max' => $max))); 
+    }
+  }
+
+  // If there were no errors, allow other modules to validate the dates
+  if (!form_get_errors()) {
+    $errors = module_invoke_all('node_recur_validate_dates', $node, $form_state);
+    foreach ($errors as $error) {
+      form_set_error($error['field'], $error['message']);
     }
   }
 }
