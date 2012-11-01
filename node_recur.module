@@ -397,6 +397,9 @@ function node_recur_generate_dates_days($node, $date, $days, $until, $offset = N
   $date = is_string($date) ? strtotime($date) : $date;
   $until = is_string($until) ? strtotime($until) : $until;
   
+  // Determine the hour of the date
+  $hour = date('G', $date);
+  
   // Move the date back based on the offset
   if ($offset) {
     $date = $date - ($offset * 86400);
@@ -442,6 +445,13 @@ function node_recur_generate_dates_days($node, $date, $days, $until, $offset = N
       
       // Apply the day differential
       $current += ($days_apart * 86400);
+      
+      // Make sure the hours match, to avoid DST issue
+      $current_hour = date('G', $current);
+      if ($current_hour != $hour) {
+        // Adjust to match
+        $current += (($hour - $current_hour) * 3600);
+      }
       
       // See if this date puts us past the limit
       if ($current > $until) {
