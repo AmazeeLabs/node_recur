@@ -643,3 +643,10 @@ function node_recur_format_date($start, $end = NULL, $format = 'long') {
   
   return $string;
 }
+
+/**
+ * Node Clone Support
+ */
+function node_recur_clone_node_alter(&$node, &$context) {
+  $node->title = $context['original_node']->title;
+}
