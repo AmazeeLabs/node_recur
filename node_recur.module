@@ -51,7 +51,7 @@ function node_recur_form_alter(&$form, &$form_state, $form_id) {
     // See if this is an 'add' operation
     if (!$form['nid']['#value'] && !$form_state['executed']) {
       // Check permissions
-      if (user_access('recur own nodes')) {
+      if (node_recur_node_recur_form_access($form['#node'])) {
         // See if we should display options for this node type
         if (node_recur_node_form_enabled($form['#node']->type)) {
           // Make sure recurring is enabled for this node
