@@ -46,6 +46,7 @@ function node_recur_node_batch_create_node($node, $start_date, $end_date = NULL,
 
   // Inject the new dates
   $field_name = node_recur_get_date_field_name($node->type);
+  $field_info = field_info_field($field_name);
   $date = $clone->$field_name;
   $date[LANGUAGE_NONE][0]['value'] = date(DATE_FORMAT_DATETIME, $start_date);
   if ($end_date) {
@@ -58,7 +59,7 @@ function node_recur_node_batch_create_node($node, $start_date, $end_date = NULL,
 
   // Save the new node
   node_save($clone);
-}
+  }
 
 /**
  * Batch ending
