@@ -9,7 +9,11 @@ Drupal.noderecur = Drupal.noderecur || {};
 Drupal.behaviors.noderecur = {
   attach: function (context) {
     // Attach the date popup to the 'recur until' field
-    $('#edit-until', context).datepicker();
+    $('#edit-until', context).datepicker(
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+    );
     
     // Select the recur form components
     var days = $('.form-item-days', context);
