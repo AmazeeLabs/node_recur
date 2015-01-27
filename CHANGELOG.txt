@@ -1,3 +1,4 @@
+bbddf56 Issue #2030137 by flocondetoile: Changed "Until" field to standard ISO format. Added more options to dropdown interface
 ebd8f36 Issue #2189705 by RayCascella: Update permission check for both admin and ownership permissions
 55fe1a7 Issue #2333687 by RayCascella: Clone module support
 f2cea71 Issue #1940200 by djdevin: Support all 3 date formats
