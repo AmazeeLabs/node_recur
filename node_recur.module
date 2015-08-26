@@ -650,3 +650,20 @@ function node_recur_format_date($start, $end = NULL, $format = 'long') {
 function node_recur_clone_node_alter(&$node, &$context) {
   $node->title = $context['original_node']->title;
 }
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function node_recur_field_extra_fields() {
+  $extra = array();
+  foreach (array_keys(node_type_get_names()) as $type) {
+    if(node_recur_node_form_enabled($type) == TRUE) {
+      $extra['node'][$type]['form']['node_recur'] = array(
+        'label' => t('Node recurring options'),
+        'description' => t('Node recur module form elements'),
+        'weight' => 5,
+      );
+    }
+  }
+  return $extra;
+}
