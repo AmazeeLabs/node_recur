@@ -1,3 +1,4 @@
+fd0834a Issue #2184767 by GiorgosK: Display form in the vertical tabs - make available on the manage fields
 bbddf56 Issue #2030137 by flocondetoile: Changed "Until" field to standard ISO format. Added more options to dropdown interface
 ebd8f36 Issue #2189705 by RayCascella: Update permission check for both admin and ownership permissions
 55fe1a7 Issue #2333687 by RayCascella: Clone module support
