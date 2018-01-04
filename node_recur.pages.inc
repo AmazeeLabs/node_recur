@@ -69,10 +69,20 @@ function _node_recur_node_recur_form($type = NULL) {
       'saturday' => t('Saturday'),
       'sunday' => t('Sunday'),
     ),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="option"]' => array('value' => 'days'),
+      ),
+    ),
   );
   
   $form['rules'] = array(
     '#type' => 'container',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="option"]' => array('value' => 'rules'),
+      ),
+    ),
   );
   
   $options = array();
@@ -105,6 +115,11 @@ function _node_recur_node_recur_form($type = NULL) {
     '#title' => t('Recur until'),
     '#description' => t('Repeat this class until the specified date.'),
     '#required' => TRUE,
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="option"]' => array('value' => 'none'),
+      ),
+    ),
   );
   if ($max = node_recur_max_future_date_span($type)) {
     $form['until']['#description'] .= '&nbsp;' . t('This date can only be up to %max in the future.', array('%max' => $max));
